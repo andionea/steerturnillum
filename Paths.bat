@@ -1,0 +1,1 @@
+set PathToDocuments=..\..\..\Platforms\Documents

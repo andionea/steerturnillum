@@ -1,0 +1,21 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DA56-11EWA
+D Double digit 7 segment high effecient red LED common anode
+K display LED 7-segment
+F http://www.kingbrightusa.com/images/catalog/SPEC/DA56-11EWA.pdf
+$ENDCMP
+#
+$CMP DA56-11SRWA
+D Double digit 7 segment super bright red LED common anode
+K display LED 7-segment
+F http://www.kingbrightusa.com/images/catalog/SPEC/DA56-11SRWA.pdf
+$ENDCMP
+#
+$CMP DA56-11SURKWA
+D Double digit 7 segment hyper red LED common anode
+K display LED 7-segment
+F http://www.kingbright.com/attachments/file/psearch/000/00/00/DA56-11SURKWA(Ver.11A).pdf
+$ENDCMP
+#
+#End Doc Library

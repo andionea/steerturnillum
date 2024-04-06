@@ -1,0 +1,9 @@
+.metadata/
+.settings/
+Debug/
+Library/
+Release/
+RemoteSystemsTempFiles/
+Log/
+__pycache__/
+~$*
