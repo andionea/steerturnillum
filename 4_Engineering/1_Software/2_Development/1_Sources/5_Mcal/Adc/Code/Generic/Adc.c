@@ -25,8 +25,6 @@
 /*                                           Declaration Of Local Variables                                          */
 /*-------------------------------------------------------------------------------------------------------------------*/
 
-Adc_ChannelConfigType *GroupConfigADC;
-
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                          Declaration Of Global Variables                                          */
 /*-------------------------------------------------------------------------------------------------------------------*/
@@ -63,7 +61,7 @@ void Adc_Init(const Adc_ConfigType *ConfigPtr)
         return;
     }
     
-    Init_gv_Masked32Bits(ConfigPtr);
+    Init_gv_Masked32Bits(Adc_gkt_Config.AdcConfig);
 }
 
 /**
@@ -73,12 +71,18 @@ void Adc_Init(const Adc_ConfigType *ConfigPtr)
  */
 void Adc_StartGroupConversion(Adc_GroupType Group)
 {
+     // Check if the group is valid
+    if (Group >= ADC_NUMBER_OF_GROUPS)
+    {
+        return E_NOT_OK;
+    }
+    
     if (Group >= ADC_NUMBER_OF_GROUPS)
     {
         return;
     }
 
-    GroupConfigADC[Group].ADCx->CR2 |= ADC_CR2_SWSTART;
+    Adc_gkt_Config.ChannelConfig[Group].ADCx->CR2 |= ADC_CR2_SWSTART;
     
 }
 
@@ -89,12 +93,18 @@ void Adc_StartGroupConversion(Adc_GroupType Group)
  */
 Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
 {
-    if (GroupConfigADC[Group].ADCx->CR2 & ADC_CR2_SWSTART == 0)
+     // Check if the group is valid
+    if (Group >= ADC_NUMBER_OF_GROUPS)
+    {
+        return E_NOT_OK;
+    }
+
+    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->CR2 & ADC_CR2_SWSTART == 0)
     {
         return ADC_IDLE;
     }
 
-    if (GroupConfigADC[Group].ADCx->SR & ADC_SR_EOC)
+    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_EOC)
     {
         return ADC_COMPLETED;
     }
@@ -103,7 +113,7 @@ Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
         return ADC_BUSY;
     }
 
-    if (GroupConfigADC[Group].ADCx->SR & ADC_SR_OVR)
+    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_OVR)
     {
         return ADC_STREAM_COMPLETED;
     }
@@ -123,6 +133,6 @@ Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
         return E_NOT_OK;
     }
 
-    DataBufferPtr = GroupConfigADC[Group].ADCx->DR;
+    DataBufferPtr = Adc_gkt_Config.ChannelConfig[Group].ADCx->DR;
  }
  

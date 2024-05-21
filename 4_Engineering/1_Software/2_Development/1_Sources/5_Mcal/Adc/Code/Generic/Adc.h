@@ -30,9 +30,6 @@ typedef unsigned int Adc_GroupType;
 /** \brief     Defines the global type for reading the converted values of a ADC channel group. */
 typedef unsigned int Adc_ValueGroupType;
 
-/** \brief     Defines the global ADC configuration type as the Init masked 32 bit registers load type. */
-typedef Init_Masked32BitsConfigType Adc_ConfigType;
-
 /** \brief     Defines the global ADC configuration type for the current status of the conversion. */
 typedef enum
 {
@@ -42,6 +39,7 @@ typedef enum
     ADC_STREAM_COMPLETED /* The result buffer is completely filled.*/
 } Adc_StatusType;
 
+/** \brief     Defines the global ADC  Channel configuration type. */
 typedef struct
 {
     /** \brief Address of the ADC*/
@@ -50,6 +48,17 @@ typedef struct
     /** \brief Channel ID*/
     Adc_GroupType channelID;
 } Adc_ChannelConfigType;
+
+/** \brief     Defines the global ADC configuration type as the Init masked 32 bit registers load type and Channel 
+ *             configuration type. */
+typedef struct
+{
+    /** \brief Pointer to the configuration of the ADC*/
+    Init_Masked32BitsConfigType *AdcConfig;
+
+    /** \brief Pointer to the configuration of the ADC Channel*/
+    Adc_ChannelConfigType *ChannelConfig;
+} Adc_ConfigType;
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                             Export Of Global Variables                                            */

@@ -21,10 +21,10 @@
 #define ADC_NUMBER_OF_GROUPS            (2U)   
 
 /** \brief     PA1 */
-#define ADC_<Port_ID>_<Port_Pin_ID>     (0U)
+#define ADC_A_1     (0U)
 
 /** \brief     PC2 */
-#define ADC_<Port_ID>_<Port_Pin_ID>     (1U)
+#define ADC_C_2     (1U)
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                          Definition Of Global Data Types                                          */
