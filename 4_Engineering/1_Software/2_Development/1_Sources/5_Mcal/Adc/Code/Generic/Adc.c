@@ -11,6 +11,7 @@
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 #include "Adc.h"
+#include "Adc_Cfg.h"
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                             Definition Of Local Macros                                            */
@@ -23,6 +24,8 @@
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                           Declaration Of Local Variables                                          */
 /*-------------------------------------------------------------------------------------------------------------------*/
+
+Adc_ChannelConfigType *GroupConfigADC;
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                          Declaration Of Global Variables                                          */
@@ -55,7 +58,12 @@
  */
 void Adc_Init(const Adc_ConfigType *ConfigPtr)
 {
-
+    if (ConfigPtr == NULL_PTR)
+    {
+        return;
+    }
+    
+    Init_gv_Masked32Bits(ConfigPtr);
 }
 
 /**
@@ -65,7 +73,13 @@ void Adc_Init(const Adc_ConfigType *ConfigPtr)
  */
 void Adc_StartGroupConversion(Adc_GroupType Group)
 {
+    if (Group >= ADC_NUMBER_OF_GROUPS)
+    {
+        return;
+    }
 
+    GroupConfigADC[Group].ADCx->CR2 |= ADC_CR2_SWSTART;
+    
 }
 
 /**
@@ -75,7 +89,24 @@ void Adc_StartGroupConversion(Adc_GroupType Group)
  */
 Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
 {
+    if (GroupConfigADC[Group].ADCx->CR2 & ADC_CR2_SWSTART == 0)
+    {
+        return ADC_IDLE;
+    }
 
+    if (GroupConfigADC[Group].ADCx->SR & ADC_SR_EOC)
+    {
+        return ADC_COMPLETED;
+    }
+    else
+    {
+        return ADC_BUSY;
+    }
+
+    if (GroupConfigADC[Group].ADCx->SR & ADC_SR_OVR)
+    {
+        return ADC_STREAM_COMPLETED;
+    }
 }
 
 /**
@@ -86,6 +117,12 @@ Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
  */
  Std_ReturnType Adc_ReadGroup(Adc_GroupType Group, Adc_ValueGroupType *DataBufferPtr)
  {
+    // Check if the group is valid
+    if (Group >= ADC_NUMBER_OF_GROUPS)
+    {
+        return E_NOT_OK;
+    }
 
+    DataBufferPtr = GroupConfigADC[Group].ADCx->DR;
  }
  

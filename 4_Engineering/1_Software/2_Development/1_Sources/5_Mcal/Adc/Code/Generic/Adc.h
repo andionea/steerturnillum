@@ -14,6 +14,7 @@
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 #include "Init.h"
+#include "stm32f407xx.h"
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                            Definition Of Global Macros                                            */
@@ -40,6 +41,15 @@ typedef enum
     ADC_COMPLETED, /* A conversion round (which is not the final one) of the specified group has been finished.*/
     ADC_STREAM_COMPLETED /* The result buffer is completely filled.*/
 } Adc_StatusType;
+
+typedef struct
+{
+    /** \brief Address of the ADC*/
+    ADC_TypeDef* ADCx;
+
+    /** \brief Channel ID*/
+    Adc_GroupType channelID;
+} Adc_ChannelConfigType;
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /*                                             Export Of Global Variables                                            */

@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "swc_core.h": "c",
-        "std_types.h": "c"
-    }
+        "std_types.h": "c",
+        "init.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }
