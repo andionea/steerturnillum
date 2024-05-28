@@ -56,11 +56,6 @@
  */
 void Adc_Init(const Adc_ConfigType *ConfigPtr)
 {
-    if (ConfigPtr == NULL_PTR)
-    {
-        return;
-    }
-    
     Init_gv_Masked32Bits(Adc_gkt_Config.AdcConfig);
 }
 
@@ -70,20 +65,8 @@ void Adc_Init(const Adc_ConfigType *ConfigPtr)
  * \return     -
  */
 void Adc_StartGroupConversion(Adc_GroupType Group)
-{
-     // Check if the group is valid
-    if (Group >= ADC_NUMBER_OF_GROUPS)
-    {
-        return E_NOT_OK;
-    }
-    
-    if (Group >= ADC_NUMBER_OF_GROUPS)
-    {
-        return;
-    }
-
-    Adc_gkt_Config.ChannelConfig[Group].ADCx->CR2 |= ADC_CR2_SWSTART;
-    
+{   
+    Adc_gkt_Config.ChannelConfig[Group].ADCx->CR2 |= ADC_CR2_SWSTART; 
 }
 
 /**
@@ -93,30 +76,27 @@ void Adc_StartGroupConversion(Adc_GroupType Group)
  */
 Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
 {
-     // Check if the group is valid
-    if (Group >= ADC_NUMBER_OF_GROUPS)
-    {
-        return E_NOT_OK;
-    }
+    Adc_StatusType Status = ADC_IDLE;
 
-    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->CR2 & ADC_CR2_SWSTART == 0)
+    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_STRT)
     {
-        return ADC_IDLE;
+        Status = ADC_IDLE;
     }
-
-    if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_EOC)
+    else if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_EOC)
     {
-        return ADC_COMPLETED;
+        Status = ADC_COMPLETED;
     }
     else
     {
-        return ADC_BUSY;
+        Status = ADC_BUSY;
     }
 
     if (Adc_gkt_Config.ChannelConfig[Group].ADCx->SR & ADC_SR_OVR)
     {
-        return ADC_STREAM_COMPLETED;
+        Status = ADC_STREAM_COMPLETED;
     }
+
+    return Status;
 }
 
 /**
@@ -127,12 +107,16 @@ Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
  */
  Std_ReturnType Adc_ReadGroup(Adc_GroupType Group, Adc_ValueGroupType *DataBufferPtr)
  {
-    // Check if the group is valid
+    Std_ReturnType RetVal;
+
     if (Group >= ADC_NUMBER_OF_GROUPS)
     {
-        return E_NOT_OK;
+        RetVal = E_NOT_OK;
     }
 
     DataBufferPtr = Adc_gkt_Config.ChannelConfig[Group].ADCx->DR;
+    RetVal = E_OK;
+
+    return RetVal;
  }
  
